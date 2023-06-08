@@ -49,3 +49,23 @@ Datu base mota honek objektuak gordetzen ditu, grafo itxura hartuz.
 #### 1.4.5 NoSQL datu baseak
 Oro har, oso egitura sinpleak eta, aldi berean, oso malguak erabiltzen dituzte.
 
+
+### 1.5 Integritate murrizketak
+Integritate-murrizketak biltegiratutako datuek bete beharreko baldintzak dira. Datu partikularretarako eta erlazionatuetarako defini daitezke.
+
+Datuen gaineko aldaketa baten emaitzak integritate-murrizketaren bat urratzen badu, ez da onartuko.
+
+
+### 1.6 Datu atzipena iteratzaileekin
+Kontsulta baten emaitza guztiak memoria nagusira pasatzea ez da komeni, oro har, asko izan daitezkeelako. Iteratzaile bat kontsulta baterako sortzen da eta emaitzak banan-banan lortzeko aukera ematen du. Datuak bigarren mailako biltegiratzetik berreskuratzeko eragiketak nahiko motelak direnez, bakoitzean datu-blokeak berreskuratu ohi dira, nahiz eta ondoren iteratzaileak banan-banan eman.
+
+
+
+### 1.7 Sarrera konkurrenteak eta transakzioak kontrolatzea
+Biltegiratutako datuak aplikazio askoren artean partekatuak izan daitezke eta irakurketa/modifikazioak jasan ditzakete aldi berean. Horregatik, datu atzipena kontrolatu beharra dago. 
+
+**Transakzio** bat, datuen sendotasuna mantenduz, beronen egoerak aldatzen dituen ekintza-multzo banaezina da, hau da, multzoko ekintza guztiak burutuko dira ala ez da bat bera ere burutuko.
+
+
+
+
