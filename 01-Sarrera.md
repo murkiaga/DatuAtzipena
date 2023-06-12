@@ -2,7 +2,7 @@
 
 ## 1. Sarrera eta oinarrizko kontzeptuak
 
-<img src="img/MapaKontzeptuala1.jpg" alt= "Mapa kontzeptuala" width="700px">
+<img src="img/01-sarrera/MapaKontzeptuala1.jpg" alt= "Mapa kontzeptuala" width="700px">
 
 + ### 1.1 Programak eta datuak
 
@@ -21,7 +21,7 @@ Programek soilik memoria nagusian dauden datuak atzitu ditzakete. Datuak memoria
 
 Azken batean, **datu iraunkorrak fitxategietan gordetzen dira beti**, bigarren mailako biltegiratze batean. 
 
-<img src="img/FitxategiSistema.jpg" alt= "Fitxategi Sistema" width="500px">
+<img src="img/01-sarrera/FitxategiSistema.jpg" alt= "Fitxategi Sistema" width="500px">
 
 + ### 1.4 Datuen biltegiratzea
 
@@ -33,13 +33,13 @@ Oinarrizko euskarri honen gainean **edozein informazio mota** adieraz daiteke.
 #### 1.4.2 Datu base erlazionalak
 Datuak **tauletan** antolatzen dira eta hauen arteko erlazioak ezarri daitezke.
 
-<img src="img/datuBaseErlazionala.png" alt= "datu base eralzionala" width="400px">
+<img src="img/01-sarrera/datuBaseErlazionala.png" alt= "datu base eralzionala" width="400px">
 
 Gaur egun datu base erlazionalak dira erabilienak. **SQL** da erabiltzen den lengoaia estandarra.
 
 #### 1.4.3 XML dokumentuak
 Informazioa modu jerarkikoan antolatzen da (zuhaitz itxura hartzen du).
-<img src="img/xmltree.png" alt= "XML zuhaitza" width="600px">
+<img src="img/01-sarrera/xmltree.png" alt= "XML zuhaitza" width="600px">
 
 XML dokumentu bat testu-fitxategi batean gorde daiteke edo XML datu base batean.
 
