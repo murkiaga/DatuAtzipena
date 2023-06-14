@@ -56,3 +56,32 @@ Salbuespen bat dagoenean **kudeatu gabe**, programaren exekuzioa bertan behera u
 [Salbuespen adibidea](adibideak/01-Fitxategiak/ZatiZeroSalbuespena.java), zati zero egitean.
 
 > Proposatutako ariketa: Nola aldatuko litzateke aurreko programa, try/catch bloke asko egon beharrean bakarra egongo balitz 3 eragiketetarako?
+
+#### 2.5.2 Salbuespen ezberdinen kudeaketa
+
+<code>try{} catch{}</code> bloke batean salbuespen mota ezberdinak kudeatu daitezke.
+
+>> Kontuan izan, praktikan *loggin* edo logak gordetzen dira programaren nondik norakoak gordetzeko (error, warning, info eta debug logak).
+
+Salbuespen ezberdinen kudeaketa [adibidea](adibideak/01-Fitxategiak/SalbuespenDesberdinak.java).
+
+#### 2.5.3 Klase bateko metodoan ezarritako salbuespenak
+
+Konpilatzaileak ikusten badu klase bateko metodo batek errorea emon dezakela eta ez dagoela <code>catch(){}</code> bloke batekin kudeatua, **konpilazioa errorez bukatu**ko da.
+
+Metodo bat throw salbuespenarekin [adibidea](adibideak/01-Fitxategiak/SalbuespenakThrowrekin.java).
+
+#### 2.5.4 Salbuespenak, hasieratzea eta baliabideak askatzea: <code>finally</code> eta <code>try</code> blokeak baliabideekin
+
+Java programa baten egitura orokorra honakoa da:
+
+```
+Hasieratzea eta baliabide esleipena
+Gorputza
+Bukaera eta baliabide askapena
+```
+**Lehenengo eta bukaerako zatiak beti exekutatu behar dira**, naiz eta gorputzean erroreak edo salbuespenak gertatu. 
+
+Sarritan, gorputzeko baldintzaren bat betetzen bada exekuzioa bukatu nahi izaten da <code>return, break, continue</code> batekin adibidez. Baina hau eginda, ez da bukaerako kode zatia exekutatuko. Baina bukaera atala <code>finally {}</code> bloke barruan sartzen bada, funtziotik/programatik irten aurretik beti exekutatuko da, naiz eta aurretik return bat egin.
+
+Hemen finally erabiltzen duen programa baten [adibide](adibideak/01-Fitxategiak/ExcepcionesConFinally.java) bat.
