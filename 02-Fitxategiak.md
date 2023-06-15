@@ -85,3 +85,84 @@ Bukaera eta baliabide askapena
 Sarritan, gorputzeko baldintzaren bat betetzen bada exekuzioa bukatu nahi izaten da <code>return, break, continue</code> batekin adibidez. Baina hau eginda, ez da bukaerako kode zatia exekutatuko. Baina bukaera atala <code>finally {}</code> bloke barruan sartzen bada, funtziotik/programatik irten aurretik beti exekutatuko da, naiz eta aurretik return bat egin.
 
 Hemen finally erabiltzen duen programa baten [adibide](adibideak/01-Fitxategiak/ExcepcionesConFinally.java) bat.
+
+### 2.6 Fitxategietara sarbide motak
+
+Bi sarbide modu nagusi existitzen dira:
++ **Sarbide sekuentziala**: Fitxategiaren hasieratik irakurtzen da. Fitxategiaren edozein puntutara iristeko, aurreko guztiak igaro behar dira (aurreko eduki guztia pasatu behar da).
+
++ **Sarbide zuzena** (edo ausazkoa): Zuzenean sartzen da fitxategiaren edozein posiziotan dauden datuetara.
+
+Sarbide modu biak baliatzen dira bai irakurketa eta idazketa eragiketetarako.
+
+Sarbide sekuentziala izango da, adibidez, fitxategia *zinta magnetiko* batean badago, edo bi aplikazio sare konexio baten bidez komunikatzen direnean eta batak besteari datuak sekuentzialki bidaltzen dizkionean.
+
+### 2.7 Fitxategikin egin daitezken eragiketak Javan
+
+Fitxategi mota (bitarra edo testu-mota) eta sarbide mota (sekuentziala edo zuzena) alde batera utzita, fitxategien gaineko oinarrizko eragiketak funtsean berdinak dira.
+
+Fitxategi batera sartzeko mekanismoa **erakusle** (*puntero*) batean eta ***buffer*** deitzen den memoria-eremu batean oinarritzen da. Erakusleak fitxategiko puntu batean kokatzen da, edo fitxategi bukaeran **EOF** (*End Of File*), fitxategiko azken byte-aren hondoren.
+
+Fitxategi guztiekin egin daitezken eragiketak hauek dira:
+1. Ireki: Fitxategi baten gainean edozein eragiketa egiteko, lehendabizi zabaldu egin behar da.
+
+2. Irakurri: <code>read()</code> metodoaren bitartez. Fitxategiaren edukia irakurtzea memoriara ekarriz, hauekin lan egin al izateko. Erakuslea irakurritako azken karakterearen ostean jartzen da.
+
+3. Salto: <code>skip()</code> metodoaren bitartez. Erakuslea byte kopuru bat aurrera bugitzean datza.
+
+4. Idatzi: <code>write()</code> metodoaren bitartez. Memoriako eduki bat fitxategian idaztean datza. Erakuslea idatzitako karakterearen ostean kokatzen da.
+
+5. Itxi: <code>close()</code> metodoaren bitartez.
+
+#### 2.7.1 Irakurketa eragiketak
+Fitxategi batetik irakurtzean, *buffer*a zehaztu behar da, non irakurritako datuak kokatuko diren. Ez bada byte edo karaktere kopurua zehazten, *buffer*a bete harte irakurriko du.
+
+<img src="img/02-fitxategiak/FitxategitikIrakurri.jpg" alt= "Fitxategien Mapa kontzeptuala" width="500px">
+
+#### 2.7.2 Idazketa eragiketak
+Fitxategi batean idaztean, *buffer*a eta byte kopurua adierazi behar da. *buffer*etik bidaltzen dira erakuslearen posiziora. Erakuslea fitxategi bukaeran badago, fitxategi bukaeran gehituko da.
+
+<img src="img/02-fitxategiak/ErakusleaBukaeranDuenIdazketa.jpg" alt= "Fitxategien Mapa kontzeptuala" width="500px">
+
+Ez da existitzen modu zuzenik fitxategi baten erdian idazteko, baina fitxategi laguntzaileak (bitartekariak) erabil daitezke.
+
+### 2.8 Fitxategietara sarbide sekuentziala Javan
+Fluxuak (*streams*) erabiliz egiten da, <code>java.io</code> paketeko klaseen bidez. Pakete honek herentzia erabiltzen du 4 klasetatik eratorrita.
+
+#### 2.8.1 Datu fluxuekin erlazionatutako klaseak
+Sortu beharreko fluxu mota ezberdina izango da testu fitxategia bada edo fitxategi bitarra bada..
+
+**Fluxu bitarrek** ez daukate misteriorik: *byte*-n fluxu bat irakurtzen dute <code>byte[]</code> motako aldagai batera, edo alderantziz.
+
+**Testurako fluxuetan** aldiz, kodifikazioaren araberakoa izango da. UTF-8 erabilita esaterako, ez dago arazorik: kodifikazio honek **1-4 *byte* erabiltzen ditu karaktere bat adierazteko**.
+- 1 byte: ASCII kodeko karaktereak
+- 2 byte: Ingelesean existitzen ez den karaktere horo. Adib. ñ, tildedun karaktereak...
+- 4 byte-ra arte: Alfabeto latindarrean oinarrituta EZ dauden karaktereak.
+
+Javak memorian testua gordetzeko UTF-16 kodifikazioa erabiltzen du, beraz, irakurketa/idazketa guztiek **rekodifikazio** bat behar dute. (UTF-8 / UTF-16).
+
+UTF-16 kodifikazioak 2 edo 4 *byte* erabiltzen ditu karaktere bat adierazteko, beste modu batera esanda, <code>char</code> motako aldagai bat edo bi (bakoitza 2 *byte* dira).
+
+Javan, testuak *array* <code>char[]</code> batean edo <code>String</code> batean gordetzen dira UTF-16 kodifikazioarekin, karaktere sekuentzia bat bezala.
+
+**Fluxuen idazketa eta irakurketarako, Javak 2 hierarkia klase ematen ditu: bat bitarrentzat eta beste bat testuentzat:**
+
+- Fluxu bitarren klaseak:
+<img src="img/02-fitxategiak/FluxuBitarrenIrakurketaIdazketa.jpg" alt= "Fitxategien Mapa kontzeptuala" width="700px">
+
+- Testu fluxuen klaseak:
+<img src="img/02-fitxategiak/TestuFluxuIrakurketaIdazketa.jpg" alt= "Fitxategien Mapa kontzeptuala" width="700px">
+
+Klase batzuek *buffering*a baliatzen dute, irakurketa/idazketa eragiketa azkarragoak lortuz.
+
+Bi adibide:
+<img src="img/02-fitxategiak/IrakurketaIdazketaBitarTestua.jpg" alt= "Fitxategien Mapa kontzeptuala" width="700px">
+
+#### 2.8.2 Rekodifikaziorako klaseak
+
+<code>InputStreamReader</code> eta <code>OutputStreamWriter</code> klaseek bi hierarkien arteko bitartekari gisa balio dute (fluxu bitarretik testurakoa, eta alderantziz).
+
+Adibideak:
+<img src="img/02-fitxategiak/RekodifikazioAdibideak.jpg" alt= "Fitxategien Mapa kontzeptuala" width="700px">
+
+#### 2.8.3 *Buffering*erako klaseak
