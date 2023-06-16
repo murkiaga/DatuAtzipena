@@ -166,3 +166,58 @@ Adibideak:
 <img src="img/02-fitxategiak/RekodifikazioAdibideak.jpg" alt= "Fitxategien Mapa kontzeptuala" width="700px">
 
 #### 2.8.3 *Buffering*erako klaseak
+*Buffering*a irakurtzeko edo idazteko eragiketak bizkortzeko aukera ematen duen teknika da, *buffer* izeneko memoria trukatzeko gune bat erabiliz. Orokorrean gomendagarria da *Buffering*a erabiltzea.
+
+*Buffer*rak beti adierazten du fitxategiaren atal baten egungo edukia. Irakurketa egitean ez da soilik ekartzen behar diren datuak, baizik eta gehiago bufferra bete arte. Honek fitxategirako beste sarbide batzuk egin beharra aurrezten du.
+
+
+*Buffer*ra antzera erabil daiteke idazketa-eragiketetarako. Fitxategian zuzenean idatzi beharrean, *buffer*rean idazten da. *Buffer*raren edukiak fitxategian irauliko dira, soilik, idazketa eragiketa batek fitxategiaren zati bati *buffer*rean ataletik kanpo eragiten duenean, edo beste programa batek atal horretako informazioa irakurtzen duenean.
+
+
+|               | Irakurketa                       | Idazketa |
+| :---:         |     :---                         |     :--- |
+| Fluxu Bitarra | <code>BufferedInputStream</code> | <code>BufferedOutputStream</code>    |
+| Testu Fluxua  | <code>BufferedReader</code>      | <code>BufferedWriter</code>      |
+
+
+Fluxuak *buffering* gabe eta *buffering*arekin:
+| Fluxua *buffering* gabe | Fluxua *buffering*arekin |
+| --- | --- |
+| <code>new FileInputStream("f.bin")</code> | <code>new BufferedInputStream(new FileInputStream("f.bin"))</code> |
+| <code>new FileOutputStream("f.bin")</code> | <code>new BufferedOutputStream(new FileOutputStream("f.bin"))</code> |
+| <code>new FileReader("f.txt")</code> | <code>new BufferedReader(new FileReader("f.txt"))</code> |
+| <code>new FileWriter("f.txt")</code> | <code>new BufferedWriter(new FileWriter("f.bin"))</code> |
+
+Bufferinga eskeintzen duten klaseek baimentzen dute testu **lerro osoak** irakurtzea/idaztea:
+
+|   Klasea     | Metodoa                       | Funtzionalitatea |
+| :---:         |     :---                         |     :--- |
+| BufferedReader | String <code>readLine()</code> | Uneko lerro bukaerara arte irakurtzen du.   |
+| BufferedWriter  | void <code>newLine()</code>      | Lerro berri bat idazten du. Linux eta Windows sistema eragileetan desberdina da, baina <code>readLine()</code> metodoak kontuan hartzen du hau.      |
+
+#### 2.8.3 Irakurtekak sarrera fluxuetan
+
+<code>InputStream</code>etik jasotako klaseen <code>read</code> funtzioak *byte*ak irakurtzen dituzte, eta <code>Reader</code>rengandik jasotakoek, berriz, **karaktereak**.
+
+Funtzio hauek irakurritako *byte* edo karaktere kopurua bueltatzen dute, eta bestela -1 balioa, ezin izan badute ezer irakurri (adibidez, erakuslea EOFean badago).
+
+Testu fitxategiekin, lerroak irakurtzen dituen <code>readLine()</code> metodoa erabil daiteke, <code>[BufferedReader](https://docs.oracle.com/javase/8/docs/api/java/io/BufferedReader.html)</code> batena, <code>FileReader</code> baten gainean eraikita.
+
+**Adibidea testu fitxategiekin**:
+
+Hurrengo programak fitxategi bateko edukia [lerroz lerro irakurtzen/bistaratzen](adibideak/01-Fitxategiak/LerrozLerroIrakurri.java) du.
+
+> Proposatutako ariketa 1:
+Sortu testu-fitxategi batean emandako testu bat bilatuko duen programa bat, agerpen bakoitzerako lerroa eta zutabea erakutsiko dituena. Lerroz lerro fitxategia irakurtzea gomendatzen da, eta lerro bakoitzaren barruan, testuaren agerpenak bilatzea, String motako metodo egokia erabiliz. Mota horretako dokumentazioa Javako APIn kontsulta daiteke.
+
+> Proposatutako ariketa 2:
+UTF-8n kodigikatutako testu-fitxategi batetik abiatuta, ISO-8859-1en kodigikatutako testu-fitxategi bat eta UTF-16n kodifikatutako beste bat sortuko dituen programa bat sortzen du. UTF-8n kodetutako fitxategia testu-editore batekin sortu behar da, eta gutxienez bokal azentudunak izan behar ditu. Online fitxategia <code>readLine()</code>-rekin irakur dezakezu. Irteera-fitxategia sortzeko, <code>BufferedWriter</code> bat erabil dezakezu (lerroz lerro idazteko), <code>FileOutputStreamStream</code> (fitxategi batera idazteko) baten gainean bildua. Bilatu sistema eragilean erabiltzen ari zaren testu-fitxategien kodifikazioa egiaztatzeko modu bat, sistema eragileko komando baten edo erabilgarritasun-programaren baten bidez. Iraulketa bitarrerako adibide programak erabil ditzakezu, beste modu batean kodetzen diren karaktereak egiaztatzeko. Alderantzizko bihurketa egingo duen beste programa bat sor dezakezu, hasierakoa bezalako fitxategi bat berriro lortzen dela egiaztatzeko, <code>InputStreamReader</code> eta <code>FileInputStream</code> klaseak erabiliz.
+
+**Adibidea fitxategi bitarrekin**:
+
+[Programa honek](adibideak/01-Fitxategiak/BitarIrakurketa.java) fitxategi bitar bat kargatzen du. Fitxategien edukiak 32 *byte*ko blokeetan irakurtzen dira. *Byte*ak hexadezimalean idazten dira (base 16), beraz, byte bakoitza 2 karakterez errepresentatzen da.
+Orokorrean, beti garatu behar dira *strems*ekin edo fluxuekin funtzionatzen duten programak.
+
+> Proposatutako ariketa:
+*BitarIrakurketa* klasea aldatzen du, edozein <code>PrintStream</code>-era iraulketa egin ahal izateko, <code>System.out</code>-era betiko egin beharrean. <code>main()</code> metodoa aldatzen du, iraulketa fitxategi baterantz egin dezan.
+
