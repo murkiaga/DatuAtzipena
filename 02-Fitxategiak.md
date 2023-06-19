@@ -195,7 +195,7 @@ Bufferinga eskeintzen duten klaseek baimentzen dute testu **lerro osoak** irakur
 | BufferedReader | String <code>readLine()</code> | Uneko lerro bukaerara arte irakurtzen du.   |
 | BufferedWriter  | void <code>newLine()</code>      | Lerro berri bat idazten du. Linux eta Windows sistema eragileetan desberdina da, baina <code>readLine()</code> metodoak kontuan hartzen du hau.      |
 
-#### 2.8.3 Irakurtekak sarrera fluxuetan
+#### 2.8.4 Irakurtekak sarrera fluxuetan
 
 <code>InputStream</code>etik jasotako klaseen <code>read</code> funtzioak *byte*ak irakurtzen dituzte, eta <code>Reader</code>rengandik jasotakoek, berriz, **karaktereak**.
 
@@ -221,3 +221,68 @@ Orokorrean, beti garatu behar dira *strems*ekin edo fluxuekin funtzionatzen dute
 > Proposatutako ariketa:
 *BitarIrakurketa* klasea aldatzen du, edozein <code>PrintStream</code>-era iraulketa egin ahal izateko, <code>System.out</code>-era betiko egin beharrean. <code>main()</code> metodoa aldatzen du, iraulketa fitxategi baterantz egin dezan.
 
+#### 2.8.5 Idazketa irteera fluxuetan
+
+<code>write</code> funtzionak (<code>OutputStream</code> klasetik heredatuak) *byte*ak idazten dituzte eta <code>Writer</code>etik heredatuak karaktereak.
+
+Erakuslea fitxategi bukaerara iristen bada, idazten jarraitzen du. <code>Writer</code>etik eratorriek <code>String</code>ak idazteko eta <code>append</code> egiteko metodoak dituzte (fitxategi bukaeran gehitzeko). 
+
+<code>FileOutputStream</code> eta <code>Writer</code>en ezaugarri erabilgarri bat, beren eraikitzaileak (*constructor*) parametro bat **izan dezake** fitxategiaren bukaeran idatzi nahi den adierazteko (*append*). Parametro gabeko eraikitzailea ere badute.
+
+```java 
+FileOutputStream(File file, boolean append)
+FileOutputStream(String fitxIzena, boolean append)
+Writer(File file, boolean append)
+Writer(String fitxIzena, boolean append)
+```
+
+[Programa honek](adibideak/01-Fitxategiak/IrteeraFluxuanIdatzi.java) testua idazten du fitxategi batean, gero itxi egiten du eta berriz ireki *append* bezala, fitxategi bukaeran zerbait gehitzeko. Lerro jausiak gehitzen dira <code>newLine()</code> erabiliz.
+
+Ezinezkoa da fitxategi bateko edukiak zuzenean fluxuak erabiliz ezabatzea edo ordezkatzea, horretarako fitxategi berean irakurri eta idatzi behar delako. Fitxategi osagarriak erabil daitezke, <code>File</code> klaseko <code>createTempFile()</code> erabiliz sor daitezkeenak. Fitxategi hauek direktorio berezi batean sortzen dira (linuxen <code>/tmp</code> direktorioan).
+
+### 2.9 Eragiketak sarbide zuzeneko fitxategiekin Javan
+
+Fitxategien sarbide zuzenerako <code>RandomAccessFile</code> klasea erabiltzen da. Berezitasunak:
+
+1. Erakuslea fitxategiko edozein puntutan kokatu daiteke <code>seek()</code> funtzioa erabiliz.
+2. Fitxategiaren gainean idazketa eta irakurketa eragiketak egin daitezke.
+
+Ezin dira fitxategi baten erdian ezabatu edo txertatu *byte*-blokeak edo karaktere-blokeak. Horretarako, aldi baterako fitxategi osagarriak erabili beharko dira.
+
+[<code>RandomAccessFile</code>](https://docs.oracle.com/javase/8/docs/api/java/io/RandomAccessFile.html) klasea.
+
+**Adibidea**
+
+[Adibide honetan (EGITEKE)], bezero bakoitzaren datuak erregistro batean gordetzen dira. Erregistro hori luzera finkoko egitura bat da, luzera finkoko eremuetan banatua. Dituen erregistro kopurua kalkulatzen da, fitxategiaren luzera *byte*tan zatituz erregistro bakoitzaren luzerarekin. <code>txertatu</code> metodoa interesgarria da, posizioa zehazten ez bada, erregistroa fitxategi bukaeran gehituko du, bestela, zehaztutako posizioan. Lehen erregistroaren posizioa 0 da.
+
+
+### 2.10 Fitxategien antolakuntza
+
+Fitxategien antolaketa datuak fitxategien barruan antolatzeko eta egituratzeko modu bat da, edukiak behar bezala interpretatu ahal izateko.
+
+Erregistro bakoitza identifikatzen duen aldagi bat (edo batzuk) egotea ohikoa da, *clave* edo **gakoa** deiturikoa.
+
+
+Fitxategien organizazio batzuek egitura osagarriak izan ditzakete fitxategian bertan. Adibidez, fitxategian bertan goiburuko bloke bat sar liteke eremuen sekuentziaren aurretik, edo ixteko bloke bat gero. Bloke horietan sar liteke zenbat erregistro dituen.
+
+
+Azken batean, fitxategi baten edukien antolamendu posible asko daude. Antolaketa sekuentziala eta **antolaketa sekuentzial indexatua**, biak luzera finkoko erregistroetan oinarrituta.
+
+#### 2.10.1 Antolaketa sekuentziala
+
+Fitxategia osatzen duten erregistroak bata bestearen atzetik biltegiratzen dira, eta ez daude inola ere ordenatuta. Erregistro konkretu bat bilatzeko hasieratik abiatu behar da aurkitu arte edo fitxategi bukaerara arte.
+
+- Bilaketak ez dira eraginkorrak
+- Erregistro baten ezabatzea ere ez da eraginkorra, hurrengo erregistro guztiak posizio bat atzeratzera behartzen duelako. Hobekuntza posible bat, erregistroa "ezabatuta" bezala markatzea izango litzateke, aldagai batean adibidez.
+- Erregistroa txertatzea eraginkorra da, beti fitxategi bukaeran txertatzen delako.
+
+#### 2.10.2 Antolaketa sekuentzial indexatua
+Antolaketa honek aukera ematen du nahi den edozein eremutan bilaketa oso eraginkorrak egiteko, eremu horretarako **indize-fitxategi** bat sortzearen eta **mantentzearen** truke.
+
+Indize-fitxategi bat fitxategi sekuentzial ordenatu bat besterik ez da, eta haren erregistroek bi eremu dituzte: bata indizea sortzen den eremuko balio baterako, eta bestea fitxategi sekuentzialean posizioa adierazten duena.
+
+<img src="img/02-fitxategiak/IndizeFitxategia.jpg" alt= "Indize fitxategia" width="700px">
+
+Ez da beharrezkoa fitxategi nagusia berrantolatzea erregistro bat gehitzean, baina bai indize-fitxategia (fitxategi txikiagoak dira).
+
+Diskan tamaina gehiago okupatzen dute baina bilaketak oso eraginkorrak dira.
