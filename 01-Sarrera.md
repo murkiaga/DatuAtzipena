@@ -127,7 +127,7 @@ Arazo honen aurrean 2 aukera sortu dira:
 2. Mapaketa objektu-erlazionala (ORM)
 
 ### 1.10 Datuen iraunkortasuna Objektuen datu baseetan
-Zuzeneak objektuak gordetzea ahalbideratzen dute. Gaur egungo erabilera oso mugatua da.
+Zuzenean objektuak gordetzea ahalbideratzen dute. Gaur egungo erabilera oso mugatua da.
 
 ### 1.11 Datuen iraunkortasuna XML natiboen datu baseetan
 
