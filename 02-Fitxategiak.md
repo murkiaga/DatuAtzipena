@@ -253,7 +253,7 @@ Ezin dira fitxategi baten erdian ezabatu edo txertatu *byte*-blokeak edo karakte
 
 **Adibidea**
 
-[Adibide honetan (EGITEKE)], bezero bakoitzaren datuak erregistro batean gordetzen dira. Erregistro hori luzera finkoko egitura bat da, luzera finkoko eremuetan banatua. Dituen erregistro kopurua kalkulatzen da, fitxategiaren luzera *byte*tan zatituz erregistro bakoitzaren luzerarekin. <code>txertatu</code> metodoa interesgarria da, posizioa zehazten ez bada, erregistroa fitxategi bukaeran gehituko du, bestela, zehaztutako posizioan. Lehen erregistroaren posizioa 0 da.
+[Adibide honetan](klaseko_ariketak/1-TestuFitxategiak/FicheroAccesoAleatorio.java), bezero bakoitzaren datuak erregistro batean gordetzen dira. Erregistro hori luzera finkoko egitura bat da, luzera finkoko eremuetan banatua. Dituen erregistro kopurua kalkulatzen da, fitxategiaren luzera *byte*tan zatituz erregistro bakoitzaren luzerarekin. <code>txertatu</code> metodoa interesgarria da, posizioa zehazten ez bada, erregistroa fitxategi bukaeran gehituko du, bestela, zehaztutako posizioan. Lehen erregistroaren posizioa 0 da.
 
 
 ### 2.10 Fitxategien antolakuntza
