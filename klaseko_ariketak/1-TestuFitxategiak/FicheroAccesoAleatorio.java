@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.ArrayList; 
 import java.util.HashMap;
 import java.util.Map;
-import javafx.util.*;
+import javafx.util.Pair;
 
 public class FicheroAccesoAleatorio {
 
