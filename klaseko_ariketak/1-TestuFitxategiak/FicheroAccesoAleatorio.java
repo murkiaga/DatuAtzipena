@@ -1,6 +1,6 @@
 // Tamaina finkoko luzeradun erregistroak fitxategietan
 import java.io.File;
-import java.io. RandomAccessFile;
+import java.io.RandomAccessFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList; 
