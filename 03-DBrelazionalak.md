@@ -45,9 +45,25 @@ s.close();
 c.close();
 ```
 
+### 3.4 Objektu-erlazioal desfasea
 
+Aurreko puntuan ikusi dugunaren alderantzizkoa egitea, hau da, memorian dauzkagun aldagaien datuak datu basean gordetzea, **zailagoa da**. Batez ere, objektuekin lanean gabiltzanean. Objektu konplexuen bilduma batek grafo-egitura du, eta ez da erraza informazio hori errenkadak eta zutabeak dituzten tauletan biltegiratzea. **Zailtasun guzti hauen multzoari objektu-erlazional desfasea deritzo**.
 
+Objektu konplexuak gordetzeko 2 aukera ditugu: bata objektuen datu base bat erabiltzea da eta bestea, **ORM** (objektu-erlazionak korrespondentzia) tresnak erabiltzea.
 
+### 3.5 Java Database Connectivity
+
+Javarako JDBC konektoreen arkitektura *driver*-etan oinarrituta dago eta bere APIa <code>java.sql</code> paketean dago eskuragarri. 
+
+### 3.6 Oinarrizko eragiketak JDBCn
+
+Oinarrizko SQL sententziak exekutatu daitezke. **DML** (*Data Manipulation Language*) eta **DDL** (*Data Definition Language*).
+
+* Kontsultak (<code>SELECT</code>) <code>executeQuery()</code> funtzioaren bidez egiten dira eta <code>ResultSet</code> bat itzultzen du zeinetan lerro bat edo batzuk egongo diren, guk *iteratu* ditzakegunak.
+
+* Gainontzeko DML sententziak (<code>UPDATE, DELETE, INSERT</code>) <code>executeUpdate</code> bidez exekutatzen dira, zeinek eragindako lerro kopurua itzultzen dituen.
+
+* DDL sentzentzuak <code>execute()</code> bidez exekutatzen dira.
 
 
 
