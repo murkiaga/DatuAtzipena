@@ -65,7 +65,18 @@ Oinarrizko SQL sententziak exekutatu daitezke. **DML** (*Data Manipulation Langu
 
 * DDL sentzentzuak <code>execute()</code> bidez exekutatzen dira.
 
+Datu-base batekin jarduteko, beharrezko kontsultak eginda, gure aplikazioak honako hau egin beharko du:
+
+1) Datu-base horrek erabiltzen duen protokoloa ulertzeko beharrezkoa den driverra kargatzea.
+2) Datu-basearekiko konexioa ezartzea.
+3) SQL kontsultak bidali eta emaitza prozesatu.
+4) Baliabideak askatzea amaitzean.
+5) Gerta daitezkeen akatsak kudeatzea
 
 
+Honako sententzia-mota hauek erabil ditzakegu:
 
+<code>Statement</code>: SQLko sententzia errazetarako.
 
+<code>PreparedStatement</code>: prestatutako kontsultetarako, adibidez parametroak dituztenetarako.
+<code>CallableStatement</code>: datu-basean biltegiratutako prozedurak gauzatzeko.
