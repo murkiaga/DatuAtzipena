@@ -79,4 +79,5 @@ Honako sententzia-mota hauek erabil ditzakegu:
 <code>Statement</code>: SQLko sententzia errazetarako.
 
 <code>PreparedStatement</code>: prestatutako kontsultetarako, adibidez parametroak dituztenetarako.
+
 <code>CallableStatement</code>: datu-basean biltegiratutako prozedurak gauzatzeko.
