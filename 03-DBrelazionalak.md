@@ -81,3 +81,27 @@ Honako sententzia-mota hauek erabil ditzakegu:
 <code>PreparedStatement</code>: prestatutako kontsultetarako, adibidez parametroak dituztenetarako.
 
 <code>CallableStatement</code>: datu-basean biltegiratutako prozedurak gauzatzeko.
+
+#### 3.6.1 Konexioak irekitzea eta zarratzea
+JDBCren *driver*rak eskuragarri daude <code>.jar</code>ean. <code>DriverManager</code> bidez konexioa ezar daiteke <code>getConnection(String konexio_URL)</code> metodoa erabiz.
+
+<code>konexio_URL</code>ari dagokionez, konexioa ezartzeko beharrezko informazioa eduki behar du. Adibidez MySQL datu base batera konektatzeko, itxura hau izango du: <code>jdbc:mysql:host:portua/DatuBasea</code> non *host* IP bat izan daitekeen edota localhost datu basea geure makinan badago. MySQLn defektuzko portua 3306 da.
+
+*driver*ak konexioa ondo burutzen badu, <code>Connection</code> objektu bat itzultzen du, zein datu basearekin egingo ditugun eragiketa guztiez arduratuko den.
+
+Gogoratu datu basearekin egiten ditugun eragiketek salbuespenak sor ditzatela eta beraz, hauek kudeatu behar ditugula <code>try-catch</code> blokeen bidez. Salbuespen orokorrez aparte, <code>SQLException</code> salbuespenak sor ditzakete.
+
+Ikusi [JDBC konexio adibidea](/adibideak/02-Konektoreak/JDBC_konexioa.java).
+
+#### 3.6.2 Statement interfazea
+<code>Statement</code> interfazea edozein motatako SQL sententzia exekutatzeko erabiltzen da. Objektu hau eskuratu daiteke <code>Connection</code> objektuaren <code>getStatement()</code> metodoa erabiliz. 
+
+[Statement-en informazioa gehiago](https://docs.oracle.com/javase/tutorial/jdbc/basics/processingsqlstatements.html)
+
+#### 3.6.3 DDL sententzien exekuzioa
+**DDL**k (*Data Definition Language*) taulak, bistak eta datu-base erlazional batean egon daitezkeen gainerako objektuak sortzeko, aldatzeko eta ezabatzeko sententziak biltzen ditu. <code>execute()</code> metodoaren bidez exekutatzen da.
+
+#### 3.6.4 Datu-basearen edukiak aldatzeko sententziak
+Sententzia hauek <code>executeUpdate()</code> metodoarekin exekutatzen dira, zeinek eragina izan duten lerro kopurua itzuliko duen. <code>INSERT</code>, <code>UPDATE</code> edo <code>DELETE</code> sententzietan erabiltzen da.
+
+#### 3.6.5
