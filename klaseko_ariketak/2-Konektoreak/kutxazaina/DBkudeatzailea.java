@@ -10,7 +10,7 @@ public class DBkudeatzailea {
 	private String PORT = "3306";
 	private String DB_NAME = "";
 	private String DB_MOTA = "mysql";
-	private String DB_URL = "jdbc:"+DB_MOTA+"://"+IP+":"+PORT+"/"+DB_NAME+"?serverTimezone=UTC";
+	private String DB_URL = "";
 	private String USER = "root";
 	private String PASS = "";
 	private Connection conexion = null;
@@ -25,7 +25,7 @@ public class DBkudeatzailea {
 		this.DB_URL = "jdbc:"+DB_MOTA+"://"+IP+":"+PORT+"/"+DB_NAME+"?serverTimezone=UTC";
 		
 		try {
-			System.out.println(DB_URL);
+			//System.out.println(DB_URL);
 			this.conexion = DriverManager.getConnection(DB_URL, USER, PASS);
 			System.out.println(DB_NAME+"-ra konexioa ezarrita.");
 		} catch (Exception e) {
@@ -33,25 +33,17 @@ public class DBkudeatzailea {
 			System.out.println(DB_NAME+"-ra konektatzean errorea.");
 		}
 	}
-
-	public String getIP() {
-		return IP;
+	
+	public void setAutocommita(boolean modua) throws Exception {
+		this.conexion.setAutoCommit(modua);
 	}
-
-	public String getUSER() {
-		return USER;
+	
+	public void egin_rollback() throws Exception {
+		this.conexion.rollback();
 	}
-
-	public void setUSER(String uSER) {
-		USER = uSER;
-	}
-
-	public String getPASS() {
-		return PASS;
-	}
-
-	public void setPASS(String pASS) {
-		PASS = pASS;
+	
+	public void egin_commit() throws Exception {
+		this.conexion.commit();
 	}
 	
 	public void print_taula_balioak(String taula, String where_klausula, String where_balioa) {
@@ -86,7 +78,7 @@ public class DBkudeatzailea {
 		}
 	}
 	
-	public float get_erabiltzaile_dirua(String erab_izena) {
+	public float get_erabiltzaile_dirua(String erab_izena, String taula) {
 		//TODO
 		return 0.0f;
 	}
@@ -95,8 +87,35 @@ public class DBkudeatzailea {
 		//TODO erab1-ri kantitatea kendu eta erab2-ri kantitatea gehitu. 
 	}
 	
-	public void set_erabiltzaileari_mugimendu_berria(String erab1, float kantitatea) {
+	public void set_erabiltzaileari_mugimendu_berria(String erab1, int kantitatea) throws Exception {
 		//TODO erabiltzaileari mugimendu berria sortu (kantitatea + edo - izan daiteke)
+		String taula = "user_movements";
+		String izena = "name";
+		String kant = "amount";
+		if (this.DB_NAME.equals("kutxabank")) {
+			taula = "erabiltzaile_mugimenduak";
+			izena = "izena";
+			kant = "kantitatea";
+		}
+		
+		PreparedStatement ps_select = null;
+		try {
+			String sql_sententzia = "INSERT INTO "+taula+" ("+izena+","+kant+") VALUES (?, ?)";
+			
+			ps_select = this.conexion.prepareStatement(sql_sententzia);
+			ps_select.setString(1, erab1);
+			ps_select.setInt(2, kantitatea);
+			if (this.DB_NAME.equals("bbva")) { //Errorea sortzen nahita, ikusteko rollback dabilen
+				ps_select.setString(2, "errorea?");
+			}
+			ps_select.executeUpdate();
+			
+		} finally {
+			try {
+				if (ps_select != null) ps_select.close();
+			} catch (Exception e) {
+				System.err.println(e.getLocalizedMessage());
+			}
+		}
 	}
-	
 }
