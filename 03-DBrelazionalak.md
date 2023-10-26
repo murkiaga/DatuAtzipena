@@ -104,4 +104,172 @@ Ikusi [JDBC konexio adibidea](/adibideak/02-Konektoreak/JDBC_konexioa.java).
 #### 3.6.4 Datu-basearen edukiak aldatzeko sententziak
 Sententzia hauek <code>executeUpdate()</code> metodoarekin exekutatzen dira, zeinek eragina izan duten lerro kopurua itzuliko duen. <code>INSERT</code>, <code>UPDATE</code> edo <code>DELETE</code> sententzietan erabiltzen da.
 
-#### 3.6.5
+[Insert adibidea.](/adibideak/02-Konektoreak/JDBC_insert.java)
+
+#### 3.6.5 Kontsulten exekuzioa eta <code>ResultSet</code>en kudeaketa
+<code>SELECT</code> sententziak <code>executeQuery()</code> metodoaren bidez exekutatu daiteke, zeinek <code>ResultSet</code> bat itzuliko du.
+
+Zer da <code>ResultSet</code>a? **Kontsultak bueltatzen dituen lerro multzoa**.
+
+Erakusleak ResultSet-eko lerro bati apuntatzen dio. **Hasieran lehen lerroaren aurrean kokatzen da**, hau da, oraindik ez dago benetako datuei erreferentziatzen. ResultSet hori rekorritu beharko da, <code>.next()</code> bezalako metodoak erabiliz.
+
+| Metodoa  | Funtzionalitatea   |
+| ------- | -------- |
+| `boolean next()`   | <code>ResultSet</code>eko erakuslea hurrengo erregistrora mugitzen du. **<code>true</code> itzuliko du baldin eta hurrengo lerroa existitzen bada.**    |
+| `getXXX()`   | Zutabeko edukia eskuratzen du. adib: <code>.getInt()</code>, <code>.getString()</code>, <code>.getDate()</code>, zutabeko datu motaren arabera.    |
+| `close()` | <code>ResultSet</code> zarratzeko. Beti itxi beharko litzateke gehiago erabiliko ez denean. |
+
+Badago beste mota batetako <code>ResultSet</code>a sortzeko aukera, zeinek lerroen arteko mugimendua edo desplazamendu malguago bat eskeintzen duena. Hauek ***Scrollable* ResultSet**ak dira. Erabiltzeko, <code>Statement</code>a sortzean parametro batzuk pasatu behar zaizkio, esanez *scrollable* bezalako ResultSeta nahi dugula. Berdina gertatzen da <code>PreparedStatement</code>ekin.
+
+```java
+Statement createStatement(int mota, int konkurrentzia)
+PreparedStatement prepareStatement(String sql, int mota, int konkurrentzia)
+```
+
+<code>mota</code> parametroaren balioak hauek izan daitezke:
+
+* <code>ResultSet.TYPE_FORDWARD_ONLY</code>: Defektuzko balioa da, aurrerantz (edo next()) irakurtzeko. 
+* <code>ResultSet.TYPE_SCROLL_INSENSITIVE</code>: *scrollable* motako ResultSeta sortzen du, zeinetan ez diren islatzen datu basean beste prozesu batzuk egindako aldaketak. Hau da, irakurketa egindako momentuko balioak soilik izango ditu.
+* <code>ResultSet.TYPE_SCROLL_SENSITIVE</code>: *scrollable* motako ResultSeta sortzen du eta beste prozesu batzuk datu basean egindako aldaketak islatzen ditu (datu eguneratuak).
+
+*scrollable* motako ResultSeta nahi badugu, adierazi behar dugu ea ResultSet horretan **egingo ditugun aldaketak datu basean gordeko ditugun ala ez**. Hau <code>konkurrentzia</code> parametroan adierazi behar da.
+* <code>ResultSet.CONCUR_READ_ONLY</code>: soilik irakurketarako
+* <code>ResultSet.CONCUR_UPDATABLE</code>: eguneraketak burutzeko
+
+Beste metodo hauek ere erabilgarri daude <code>ResultSet</code> ***scrollable*** erabiltzen denean:
+| Metodoa   | Funtzionalitatea   |
+| ------- | --- |
+| `boolean previous()` `boolean first()` <br> `boolean last()` <br>`void beforeFirst()` <br> `void afterLast()` <br> `boolean absolute(int pos)` <br> `boolean isFirst()` <br>`boolean isLast()`<br>`boolean isBeforeFirst()`<br>`boolean isAfterLast()`<br>`int getRow()`| Erakuslea tokiz mugitzen duten metodoak eta erakuslearen kokapenaren informazioa bueltatzen duten metodoak. Adibidez,  <code>.next()</code> metodoarekin hurrengo lerrora mugitzen den modura,  <code>.previous()</code> metodoarekin aurrekora mugitzen da. <code>.absolute(int pos)</code> metodoarekin emandako posizio kopurua mugitzen da erakuslea kokatuta dagoen tokitik (positiboa ala negatiboa izan daiteke). <code>.getRow()</code> metodoarekin, erakuslea kokatuta dagoen lerro zenbakia itzuliko du. |
+| `getXXX()`    | Zutabeko edukia eskuratzen du. adib: <code>.getInt()</code>, <code>.getString()</code>, <code>.getDate()</code>, zutabeko datu motaren arabera.    |
+| `close()` | <code>ResultSet</code> zarratzeko. |
+
+
+### 3.7 Sententzia prestatutak
+
+Aurreko adibideetako SQL sententziak konstanteen bidez erabili dira, baina sarritan **erabiltzaileari teklatutik balioren bat** sartzeko eskatzen zaio. Ez dakigu erabiltzaileak sartutako hori SQL kodea izan daiteken (*SQL injection* eginez), komatxoak edo komatxo bikoitzak dituen... beraz kontu handia izan behar dugu honekin.
+
+Orain arteko SQL sententziek honelako itxura izan zezaketeen:
+```java
+String cons = "SELECT * FROM erabiltzaileak WHERE DNI='"+dni+"'";
+```
+Honek izugarrizko **arazoak** eman ditzake.
+
+1) **Segurtasunean**: <code>dni</code> hori erabiltzaileak teklatutik sartu badu, bere balioa SQL kode zati bat izan daiteke, eta gure kodean SQL injection egin. Adibidez balioa <code>a' or '1=1</code> bada, gure SQL sententzia honela geratuko litzateke:
+```java
+String cons = "SELECT * FROM erabiltzaileak WHERE DNI='a' or '1=1'";
+```
+Aurreko SQL sententziak erabiltzaile **guztiak** itzuliko lituzke eta ez soilik DNI konkretu batena. Adibide honetan SELECT egiten gabiltza, baina berdina gertatuko litzateke UPDATE eta INSERT kasuetan.
+
+2) **Errendimenduan**: Datu-baseak kudeatzeko sistemara bidaltzen den kontsulta bat konpilatu egiten da exekutatu aurretik, hau da, aztertu egiten da eta horretarako gauzatze-plan bat sortzen da. Kontsulta baten eta bestearen artean aldagai batzuen balioa bakarrik aldatzen bada, kontsulta bakoitza konpilatuko da, beti gauzatze-plan bera lortzeko.
+
+**Sententzia prestatuek arazo hauek ekiditen dituzte**.
+
+<code>PreparedStatement</code> bidez egiten dira sententzia prestatuak. SQL sententzia ematen zaio parametro gisa eta "**?**" karakterea erabiltzen da markagailu (*placeholder*) gisa. Markagailu horietan jarriko ditugu gure balioak.
+
+<code>PreparedStatement</code> dituen metodoak eta <code>Statement</code>-ek ez.
+| Metodoa   | Funtzionalitatea   |
+| ------- | --- |
+| `ResultSet executeQuery()` <br> `int executeUpdate()` <br> `boolean execute()`| Hiru metodo hauek ez dite SQL kontsulta parametroan, eraikitzailean jarrita dagoelako. |
+| `setXXX(int pos, YYYY balioa)`    | *placeholder* edo markagailu bati balioa ezartzeko. Posizioa "?"-ren posizioa da eta balioa zein balio eduki beharko luken. |
+| `setNull(int post, int SQLmota)` | Zutabe bati NULL balioa ezartzen dio. Mota adierazi behar da, motak <code>java.sql.Types</code>-n daude ezarrita. |
+
+Aurreko adibidea honela geratuko litzateke prestatutako sententzia erabiliz:
+
+```java
+String sql_sententzia = "SELECT * FROM erabiltzaileak WHERE DNI=?";
+PreparedStatement ps_select = conexion.prepareStatement(sql_sententzia);
+ps_select.setString(1, dni);
+ResultSet rs = ps_select.executeQuery();
+```
+Kontutan izan DNI-ren markagailua ez dela komatxo bikoitzen artean jarri, nahiz eta testu motakoa izan. Gero <code>.setString(x,x)</code> egitean esaten diogu testu motakoa dela eta berak jarriko ditu komatxoak behar izanez gero.
+
+### 3.8 Transakzioak
+
+Hainbat SQL sententzia blokean exekutatu nahi ditugunean, Transakzioak erabili behar ditugu. Honek ahalbideratuko ditu **bloke guztiko sententziak exekutatzea, ala bat ere ez**.
+
+```
+SAIATU:
+    START TRANSACTION
+    sententzia 1
+    sententzia 2
+    ...
+    sententzia n
+    COMMIT
+ERROREREN BAT EGON BADA:
+    ROLLBACK
+```
+
+Transakzio bat <code>rollback</code> bidez abortatu daiteke, eta aldaketaren bat egin bada desegingo luke.
+
+Transakzioak egiteko metodoak:
+| Metodoa   | Funtzionalitatea   |
+| ------- | --- |
+| `vois setAutoCommit(boolean autoCommit)`| <code>autoCommit=false</code> jarrita Transakzio bat hasiko dugu. |
+| `void commit()`    | Transakzio bukaera ezartzen du. Transakzio barruko sententziak datu basean islatuta geratuko dira. |
+| `void rollback()` | Transakzio barruan egindako sententzia guztiak desegingo ditu. Transakzio barruko sententziaren batek errorea (*SQLException*) ematen duenean deitu beharko litzateke. |
+
+Ikusi [transakzioen adibide bat](/klaseko_ariketak/2-Konektoreak/transakzioak.java). Adibide konplexuago bat ikusteko, 2 datu baseren arteko transakzio bat dago [adibide honetan](/klaseko_ariketak/2-Konektoreak/kutxazaina/main.java).
+
+### 3.9 Gako autogeneratuen balioak
+Sarritan taula bateko identifikatzaileak (gakoak) zenbaki autoinkrementalak dira eta Datu Base Kudeatzaileari uzten zaio kudeaketa hau (automatikoki ematen dio balio bat). Baina sarritan interesgarria izango da <code>INSERT</code> bat egitean gakoari ze balio eman dion jakitea, horretarako <code>Statement</code> eta <code>PreparedStatement</code>ek aukera bat eskeintzen dute.
+| Metodoa   | Funtzionalitatea   |
+| ------- | --- |
+| `int executeUpdate(String sql, int autoGeneratedKeys)`| <code>autoGeneratedKeys</code> ek balio hauek har ditzake: <br>-`Statement.RETURN_GENERATED_KEYS` <br> -`Statement.NO_GENERATED_KEYS`<br> Lehenengoarekin automatikoki sortutako gakoa jaso daiteke, normalean bakarra izaten da. Metodo hau ezin daiteke `PreparedStatement`ekin erabili, Connection batekin sortzen delako.|
+| `ResultSet getGeneratedKeys()` | `ResultSet` bat itzultzen du sortutako gako autogeneratuekin. Normalean bakarra itzuliko du. `PreparedStatement`ekin erabil daiteke. |
+
+`Connection`-en metodoak gako autogeneratuekin erabili daitezkenak:
+| Metodoa   | Funtzionalitatea   |
+| ------- | --- |
+| `PreparedStatement prepareStatement(String sql, int autoGeneratedKeys`| Sententzia bat prestatzen du. Gako autogeneratuen balioak eskuratzeko balioa ezarri behar da `PreparedStatement.RETURN_GENERATED_KEYS`|
+| `ResultSet getGeneratedKeys()` | `ResultSet` bat itzultzen du sortutako gako autogeneratuekin. Normalean bakarra itzuliko du. `PreparedStatement`ekin erabil daiteke. |
+
+Hemen [gako autogeneratuen adibide bat](/klaseko_ariketak/2-Konektoreak/gako_autogeneratuak.java).
+
+### 3.10 Biltegiratutako prozeduretarako eta funtzioetarako deiak
+
+Batzuetan datu base kudeatzailean prozedurak sortzea interesatzen da. JDBC erabiliz prozedura horiei deitu daiteke. Adibidez, datu base kudeatzailean prozedura hau daukagu:
+
+```SQL
+CREATE DEFINER=`root`@`%` PROCEDURE `get_euro_pertsona`(IN in_izena VARCHAR(10), OUT out_kantitatea DOUBLE)
+BEGIN
+DECLARE kant DOUBLE;
+SELECT kantitatea FROM euroak WHERE izena=in_izena INTO kant;
+    SET out_kantitatea = kant;
+END
+```
+
+Prozedura horri `get_euro_pertsona(in izena, out kantitatea)` bezala dei diezaiokegu. Horretarako `CallableStatement`-en `prepareCall` metodoa erabiliko dugu.
+
+|    | Parametroekin   | Parametro gabe|
+| ------- | --- |--- |
+| Prozedura| `{ call prozedura(?,?...) }` | `{call  prozedura }`|
+| Funtzioa| `{ ? = call funtzioa(?,?...) }` | `{call  funtzioa }`|
+
+`CallableStatement`en metodoak:
+| Metodoa   | Funtzionalitatea   |
+| ------- | --- |
+| `setXXX(int pos, YYYY balioa)`|  `PreparedStatement`en modura.|
+| `void registerOutParameter(int pos, int sqlType` | Deiak itzuliko (*out* balioa) duen balio mota zehazten da.  |
+| `getXXX(int pos)` | Irteera balio bat hartzen du. |
+| `ResultSet getResultSet()` | `ResultSet` bat jasotzen du prozedura edo funtzioaren emaitza gisa. |
+
+[Prepared Call adibidea](/klaseko_ariketak/2-Konektoreak/prepareCall_procedura.java).
+
+### 3.11 Kontsulta baten emaitzen eguneraketak
+Beste modu batera esanda, `ResultSet` eguneragarriak dira.
+
+**`PreparedStatement`** eta **`Statement`** eguneragarriak eskuratzeko **`Connection`**-en metodoak:
+
+```java
+Statement createStatement(int mota, int konkurrentzia)
+PreparedStatement prepareStatement(String sql, int mota, int konkurrentzia)
+```
+
+<code>mota</code> parametroak `ResultSet` *scrollable* izatea ahalbideratzen du aurreko punturen batean ikusi dugun bezala. Baina orain konkurrentziaren balioei erreparatuko diegu:
+
+* `ResultSet.CONCUR_READ_ONLY`: Irakurketak egiteko soilik
+* `ResultSet.CONCUR_UPDATABLE`: ResultSet-eko balioak eguneratzeko eta datu basean gordetzeko.
+
+Ikusi [dokumentazio ofiziala](https://docs.oracle.com/javadb/10.6.2.1/devguide/cdevconcepts28351.html).
+
+Hemen [klasean ikusitako adibide bat](/klaseko_ariketak/2-Konektoreak/resultset_updatable.java).
