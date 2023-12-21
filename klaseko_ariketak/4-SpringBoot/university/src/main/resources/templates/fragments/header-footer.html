@@ -1,0 +1,29 @@
+<nav th:fragment="navbar" class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Uni-App</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav me-auto mb-2 mb-md-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" th:href="@{/}">Hasiera</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{/ikasleak}">Ikasleak</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{/unibertsitateak}">Unibertsitateak</a>
+          </li>
+        </ul>
+        <form class="d-flex" role="search" th:action="@{/bilatu}" method="get">
+          <input class="form-control me-2" type="search" placeholder="Bilatu unibertsitatea, ikaslea..." aria-label="Search" id="q" name="q">
+          <button class="btn btn-outline-success" type="submit">Bilatu</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+
+<div th:fragment="footer">
+	HAU FOOTERRA DA
+</div>

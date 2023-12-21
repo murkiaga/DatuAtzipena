@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Ikasleak</title>
+	
+	<span th:insert="fragments/bootstrap.html :: css"/>
+	<link rel="stylesheet" th:href="@{/css/style.css}" />
+	
+</head>
+<body>
+	
+	<header th:insert="fragments/header-footer.html :: navbar"> </header>
+	<main class="container">
+		<h1>Unibertsitate zerrenda</h1>
+		<table th:if="${unibertsitateak}" class="table">
+			<tr>
+				<th>ID</th>
+				<th>irudia</th>
+				<th>Name</th>
+				<th>Kokapena</th>
+				<th>Ikasleak</th>
+				<th>Eragiketak</th>
+			</tr>
+			<tr th:each="uni: ${unibertsitateak}">
+				<td th:text="${uni.id}"></td>
+				<td><img th:if="${uni.irudia != null}" th:src="@{${uni.irudiaImagePath}}" width="50px" :alt="'Imagen de la universidad'"/></td>
+				<td th:text="${uni.name}"></td>
+				<td th:text="${uni.location}"></td>
+				<td>
+					<ul>
+						<li th:each="student: ${uni.students}">
+							<a th:href="@{/ikasleak/ikaslea/{id}(id=${student.id})}" th:text="${student.name + ' ' + student.lastname}"></a>
+						</li>
+					</ul>
+				</td>
+				<td>
+					<a th:href="@{/unibertsitateak/unibertsitatea/edit/{id}(id=${uni.id})}">Edit</a>
+					<a th:href="@{/unibertsitateak/unibertsitatea/delete/{id}(id=${uni.id})}">Ezabatu</a>
+				</td>
+			</tr>
+		</table>
+		<a th:href="@{/unibertsitateak/unibertsitatea/new}">+ Sortu</a>
+		
+	</main>
+	<footer th:insert="fragments/header-footer.html :: footer"> </footer>
+	<span th:insert="fragments/bootstrap.html :: js"/>
+</body>
+</html>

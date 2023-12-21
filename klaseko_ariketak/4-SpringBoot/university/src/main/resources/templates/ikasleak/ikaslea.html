@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Ikaslea</title>
+</head>
+<body>
+	<h1>Ikaslearen informazioa</h1>
+	<p th:if="${ikaslea}">
+		Ikaslearen izena <b><span th:text="${ikaslea.name}"></span></b><br>
+		Ikaslearen abizena <b><span th:text="${ikaslea.lastname}"></span></b>
+	</p>
+	<p th:unless="${ikaslea}">Ikaslea ez da existitzen</p>
+		
+</body>
+</html>

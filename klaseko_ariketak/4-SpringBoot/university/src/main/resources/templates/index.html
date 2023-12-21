@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Index</title>
+	
+	<span th:insert="fragments/bootstrap.html :: css"/>
+	<link rel="stylesheet" th:href="@{/css/style.css}" />
+	
+</head>
+<body>
+	
+	<header th:insert="fragments/header-footer.html :: navbar"> </header>
+	<main class="container">
+		<h1>Hasiera</h1>
+		<ul>
+			<li><a th:href="@{/ikasleak}">/ikasleak</a></li>
+			<li><a th:href="@{/ikasleak/ikaslea/1}">/ikasleak/ikaslea/1</a></li>
+			<li><a th:href="@{/ikasleak/ikaslea/2}">/ikasleak/ikaslea/2</a></li>
+		</ul>
+		
+	</main>
+	<footer th:insert="fragments/header-footer.html :: footer"> </footer>
+	<span th:insert="fragments/bootstrap.html :: js"/>
+</body>
+</html>

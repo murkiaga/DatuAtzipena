@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Ikasleak</title>
+	
+	<span th:insert="fragments/bootstrap.html :: css"/>
+	<link rel="stylesheet" th:href="@{/css/style.css}" />
+	
+</head>
+<body>
+	
+	<header th:insert="fragments/header-footer.html :: navbar"> </header>
+	<main class="container">
+		<h1>Ikasle zerrenda</h1>
+		<table th:if="${ikasleak}" class="table">
+			<tr>
+				<th>ID</th>
+				<th>Name</th>
+				<th>LastName</th>
+				<th>Eragiketak</th>
+			</tr>
+			<tr th:each="ikasle: ${ikasleak}">
+				<td th:text="${ikasle.id}"></td>
+				<td th:text="${ikasle.name}"></td>
+				<td th:text="${ikasle.lastname}"></td>
+				<td>
+					<a th:href="@{/ikasleak/ikaslea/edit/{id}(id=${ikasle.id})}">Edit</a>
+					<a th:href="@{/ikasleak/ikaslea/delete/{id}(id=${ikasle.id})}">Ezabatu</a>
+				</td>
+			</tr>
+		</table>
+		<a th:href="@{/ikasleak/ikaslea/new}">+ Sortu</a>
+		
+	</main>
+	<footer th:insert="fragments/header-footer.html :: footer"> </footer>
+	<span th:insert="fragments/bootstrap.html :: js"/>
+</body>
+</html>

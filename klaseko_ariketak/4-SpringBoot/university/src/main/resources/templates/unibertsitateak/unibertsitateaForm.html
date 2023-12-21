@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Ikasleak</title>
+	
+	<span th:insert="fragments/bootstrap.html :: css"/>
+	<link rel="stylesheet" th:href="@{/css/style.css}" />
+	
+</head>
+<body>
+	
+	<header th:insert="fragments/header-footer.html :: navbar"> </header>
+	<main class="container">
+		
+
+		<form th:object="${unibertsitatea}" 
+				th:action="@{/unibertsitateak/unibertsitatea/new/submit}" 
+				method="post"
+				enctype="multipart/form-data">
+			<h4><span th:text="${id} ? 'Edit' : 'Sortu'"></span> unibertsitatea</h4>
+			
+			<input type="text" id="id" hidden="true" th:field="*{id}" />
+		    <label for="name">Izena:</label>
+		    <input type="text" id="name" name="name" th:field="*{name}" />
+			<br>
+		    <label for="lastname">Kokapena:</label>
+		    <input type="text" id="location" name="location" th:field="*{location}" />
+			<br>
+			<label for="image">Image:</label>
+        	<input type="file" name="image" accept="image/png, image/jpeg" />
+        	<br/>
+     	
+
+
+            <table>
+				<tr th:each="ikaslea: ${unibertsitatea.students}">
+					<td th:text="${ikaslea.name} + ' ' + ${ikaslea.lastname}"></td>
+					<td><a th:href="@{/ikasleak/ikaslea/desmatrikulatu/{ikasle_id}(ikasle_id=${ikaslea.id})}"><img th:src="@{/img/x-circle.svg}"></a></td>
+				</tr>
+			</table>
+		    <button type="submit">Gorde</button>
+		</form>
+		
+		
+		
+	</main>
+	<footer th:insert="fragments/header-footer.html :: footer"> </footer>
+	<span th:insert="fragments/bootstrap.html :: js"/>
+</body>
+</html>

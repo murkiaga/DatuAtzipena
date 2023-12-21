@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Ikasleak</title>
+	
+	<span th:insert="fragments/bootstrap.html :: css"/>
+	<link rel="stylesheet" th:href="@{/css/style.css}" />
+	
+</head>
+<body>
+	
+	<header th:insert="fragments/header-footer.html :: navbar"> </header>
+	<main class="container">
+
+		<form th:object="${ikaslea}" th:action="@{/ikasleak/ikaslea/new/submit}" method="post">
+			<h4><span th:text="${id} ? 'Edit' : 'Sortu'"></span> ikaslea</h4>
+			
+			<input type="text" id="id" hidden="true" th:field="*{id}" />
+		    <label for="name">Izena:</label>
+		    <input type="text" id="name" name="name" th:field="*{name}" />
+			<br>
+		    <label for="lastname">Abizena:</label>
+		    <input type="text" id="lastname" name="lastname" th:field="*{lastname}" />
+			<br>
+			<label for="lastname">Unibertsitatea:</label>
+			<select th:field="*{university}">
+				<option value="">---</option>
+				<option th:each="i : ${unibertsitateak}" th:value="${i.id}" th:text="${i.name}"></option>
+			</select>
+			<br>
+		    <button type="submit">Gorde</button>
+		</form>
+		
+	</main>
+	<footer th:insert="fragments/header-footer.html :: footer"> </footer>
+	<span th:insert="fragments/bootstrap.html :: js"/>
+</body>
+</html>
