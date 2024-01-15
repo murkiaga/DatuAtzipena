@@ -71,7 +71,7 @@ public class QuickStart {
 ```
 
 
-## GeoSpacial queries
+## GeoSpatial queries
 
 ### $near
 
