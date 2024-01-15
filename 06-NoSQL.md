@@ -73,9 +73,25 @@ public class QuickStart {
 
 ## GeoSpatial queries
 
-### $near
+### $near (hurbiltasunagatik bilatu)
 
 ```
 db.COLLECTION.createIndex({geometry: "2dsphere"})
-db.campings.find({geometry:{$near:{$geometry:{type: "Point", coordinates: []},$maxDistance:1000}}}).count()
+db.kanpinak.find({geometry:{$near:{$geometry:{type: "Point", coordinates: [-2.4203279,43.3211948]},$maxDistance:1000}}}).count()
 ```
+
+
+### $geoWithin (eremu barruan bilatu)
+
+Bilatu eremu honetan:
+
+<img src="img/06-NoSQL/area.png" alt= "Bilaketa eremua" width="500px">
+
+4 puntu sortuko ditugu, bilaketan, lehen eta azken puntua, puntu bera izan behar dute.
+```
+p1 = [-2.434813468508409, 43.334478736696035]
+p2 = [-2.4376489364561156, 43.302827294032724]
+p3 = [-2.4053246018522607, 43.29528038271553]
+p4= [-2.3530709782445247, 43.308545813855275]
+db.kanpinak.find({geometry:{$geoWithin:{$geometry:{type:"Polygon", coordinates:[[p1,p2,p3,p4,p1]]}}}})
+``` 
