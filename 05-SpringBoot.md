@@ -1,7 +1,18 @@
-# Spring Boot
+# 5. Spring Boot
 
+## 5.1 Spring Boot + Thymeleaf
+[Spring webgune ofiziala](https://spring.io/).
 
-## X JPA repository
+Spring boot erabiliko dugu, horretarako, webgune ofizialetik "*Projects*"->"*Spring tools 4*" deskargatuko dugu. Eclipse IDEa da Spring Booterako prestatuta. *Spring Boot*ek **Java Web aplikazio** bat sortzea ahalbideratuko digu MVC modeloa erabiliz (*Movel View Controller*).
+
+## 5.2 Model
+New -> "Spring Starter Project" batekin hasiko gara. Pakete berri bat sortuko dugu gure modeloentzako. [Student modeloaren adibidea](/klaseko_ariketak/4-SpringBoot/university/src/main/java/com/university/app/model/Student.java).
+
+## 5.3 Controller
+
+## 5.4 View (Thymeleaf)
+
+## 5.X JPA repository
 
 Dokumentu honetan, Spring Boot-en JPA erabiliz `JpaRepository` interfazea nola erabiliko den ikusiko dugu.
 

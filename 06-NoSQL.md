@@ -73,7 +73,55 @@ public class QuickStart {
 
 ## GeoSpatial queries
 
+[Dokumentazio ofiziala](https://www.mongodb.com/docs/manual/geospatial-queries/).
+
+Erabiliko ditugun JSON dokumentuak **GEOJSON** motakoak izango dira. Datuak [OpenData Euskaditik](https://opendata.euskadi.eus/hasiera/) jaso ditzakegu.
+
+GEOJSON dokumentu baten adibidea (ikusi "*geometry*" dokumentua daukala bere barnean):
+```
+[ {
+    "id" : 1,
+    "type" : "Feature",
+    "geometry" : {
+      "type" : "Point",
+      "coordinates" : [ -2.927723, 43.2624787 ]
+    },
+    "properties" : {
+      "documentname" : "ABANDO",
+      "documentdescription" : "Guztiz zaharberritutako eraikin moderno batean dagoen lau izarreko hotel honek dekorazio abangoar...",
+      "templatetype" : "Ostatuak",
+      "country" : "España",
+      "marks" : "Bilbao",
+      "physical" : "Egokia aniztasun funtzional fisikoa duten pertsonentzat",
+      "visual" : "Egokia ikusmeneko aniztasun funtzionala duten pertsonentzat",
+      "auditive" : "Egokia entzumeneko aniztasun funtzionala duten pertsonentzat",
+      "intellectual" : "Egokituta adimeneko aniztasun funtzionala duten pertsonentzat",
+      "organic" : "Egokitua aniztasun funtzional organikoa duten pertsonentzat",
+      "tourismemail" : "abando@aranzazu-hoteles.com",
+      "web" : "https://www.aranzazu-hoteles.com/",
+      "lodgingtype" : "Hotelak",
+      "category" : "4",
+      "room" : "1",
+      "signatura" : "HBI01056",
+      "capacity" : "259",
+      "store" : "1",
+      "municipality" : "Bilbao",
+      "municipalitycode" : "020",
+      "territory" : "Bizkaia",
+      "territorycode" : "48",
+      "countrycode" : "108",
+      "friendlyurl" : "https://turismoa.euskadi.eus/eu/ostatuak/abando-hotela/aa30-12375/eu/",
+      "physicalurl" : "https://turismoa.euskadi.eus/aa30-12375/eu/contenidos/a_alojamiento/0000000005_a1_rec_turismo/eu_5/5-ficha2.html",
+      "dataxml" : "https://turismoa.euskadi.eus/contenidos/a_alojamiento/0000000005_a1_rec_turismo/eu_5/data/5_openData.xml",
+      "metadataxml" : "https://turismoa.euskadi.eus/contenidos/a_alojamiento/0000000005_a1_rec_turismo/r01Index/0000000005_a1_rec_turismo-idxContent.xml",
+      "zipfile" : "https://turismoa.euskadi.eus/contenidos/a_alojamiento/0000000005_a1_rec_turismo/opendata/0000000005_a1_rec_turismo.zip"
+    }
+  }, 
+  ...
+  ]
+```
 ### $near (hurbiltasunagatik bilatu)
+Lehenbabizi *index edo indize* bat sortu behar dugu **geometry** dokumentuekiko, bilaketak hauen bidez egingo direlako. 
 
 ```
 db.COLLECTION.createIndex({geometry: "2dsphere"})
