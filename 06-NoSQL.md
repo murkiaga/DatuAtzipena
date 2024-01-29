@@ -1,10 +1,10 @@
 # 6. NoSQL (*Not Only SQL*)
 
-## Lehen pausuak
+## 6.1 Lehen pausuak
 
 Instalatu [MongoDB](https://www.mongodb.com/try/download/community) eta [MongoCompass](https://www.mongodb.com/products/tools/compass) (GUI).
 
-## MongoDB Queryak:
+## 6.2 MongoDB Queryak:
 [Query Dokumentazio ofiziala](https://www.mongodb.com/docs/manual/tutorial/query-documents/).
 
 ```mongosh
@@ -34,7 +34,7 @@ db.instrumentuak.deleteOne({"_id":"hodei"})
 db.instrumentuak.deleteMany({"mota": {$in: ["haizezkoa", "soka"]}})
 ```
 
-## Eclipsetik MongoDB atzitu
+## 6.3 Eclipsetik MongoDB atzitu
 
 MongoDB SpringBoot aplikaziotik ere erabil daiteke, baina unitate honetan, errazago egiteko, Maven proiektu soil bat erabiliko da.
 
@@ -71,7 +71,7 @@ public class QuickStart {
 ```
 
 
-## GeoSpatial queries
+## 6.4 GeoSpatial queries
 
 [Dokumentazio ofiziala](https://www.mongodb.com/docs/manual/geospatial-queries/).
 
