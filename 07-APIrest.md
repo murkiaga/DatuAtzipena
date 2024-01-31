@@ -63,10 +63,89 @@ API bati anonimoki deia egin daiteke, hau da, autentifikazioa egin gabe, baina h
 
 ## 7.4 Abantailak
 
-
-
-
 API REST bat erabiltzearen abantaila nagusia edozein kontsumitzaileren aurrean ematen duen **independentzia** da, edozein hizkuntza edo plataformarekin sartzen dela ere. Horri esker, API REST bera hamaika bezerok kontsumi dezakete, bezero horien izaera edozein izanik ere, eta beste edozein kontsumitzaile motatara aldatzeak ez du inolako eraginik izango harengan. Ezaugarri horrek **fidagarritasuna, eskalagarritasuna eta eramangarritasun erraza** ematen dizkio beste edozein plataformari, **bezeroa zerbitzaritik erabat isolatzen baitu**. 
 
 Erantzunen informazio-trukea euskarri batean egitea baino ez da eskatzen, normalean **JSON edo XML formatuan**. Bezeroaren eta zerbitzariaren arteko bereizketa horren ondorioz, beste zerbitzari edo datu-base batzuetara modu gardenean migratu daiteke, betiere datuak behar bezala bidaltzen badira. Horrek REST APIak edozein lan-inguruneri ematen dioten malgutasunagatik gehien erabiltzen diren web-arkitekturetako bat bihurtzen ditu, edozein dela ere haien izaera.
 
+## 7.5 Spring Boot-en API Server
+Spring Boot-en `@RestController` dekoratzailea erabiliz, klase bat kontrolatzaile gisa markatzen da, HTTP eskaerak kudeatzeko eta JSON formatuko erantzunak bueltatzeko. Decorator hau bi anotazioen funtzionalitatea bateratzen du: `@Controller` eta `@ResponseBody`.
+
+- `@Controller`: Spring MVC-ren kontrolatzaile gisa markatzen du klase bat, hau da, HTTP eskaerak kudeatu ditzakeen.
+
+- `@ResponseBody`: Esan nahi du metodo baten itzulpena zuzenean HTTP erantzunaren gorputzera serializatuko dela, ikuspegi bezala interpretatua ez.
+
+`@RestController`-rekin markatutako klaseko metodoak automatikoki kontrolatzaileak dira, eta metodo horien emaitza zuzenean erantzunaren gorputzera serializatzen da.
+
+Adibide sinple bat:
+```java
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class AdibideController {
+
+    @GetMapping("/kaixo")
+    public KaixoResponse kaixo() {
+        return new KaixoResponse("Kaixo, mundua!");
+    }
+
+    static class KaixoResponse {
+        private final String mezua;
+
+        public KaixoResponse(String mezua) {
+            this.mezua = mezua;
+        }
+
+        public String getMezua() {
+            return mezua;
+        }
+    }
+}
+```
+
+`curl http://localhost:8080/kaixo`-ren emaitza JSON hau izango litzateke:
+```
+{
+  "mezua": "Kaixo, mundua!"
+}
+```
+
+### 7.5.1 RestController-en metodo nagusiak
+`@RestController`-ekin markatutako Spring Boot kontrolatzaile batek hainbat metodo izan ditzake, zeinen bakoitzak HTTP (**GET, POST, PUT, DELETE**, etab.) eragiketa desberdinak errepresentatu ditzakeen. Metodo hauek datuak datu-base batetik eskuratu, formularioak prozesatu edo datuak JSON formatuan itzuli ditzake.
+
+
+- Datuak Eskuratzeko **GET**
+```java
+@GetMapping("/erabiltzaileak")
+public List<Erabiltzailea> erabiltzaileakLortu() {
+    return erabiltzaileZerbitzua.erabiltzaileakLortu();
+}
+```
+
+- Baliabideak sortzeko **POST**
+```java
+@PostMapping("/erabiltzaileak")
+public ResponseEntity<String> erabiltzaileaSortu(@RequestBody Erabiltzailea erabiltzaileBerria) {
+    erabiltzaileZerbitzua.erabiltzaileaSortu(erabiltzaileBerria);
+    return new ResponseEntity<>("Erabiltzailea ongi sortu da", HttpStatus.CREATED);
+}
+```
+
+- Baliabideak eguneratzeko **PUT**
+```java
+@PutMapping("/erabiltzaileak/{id}")
+public ResponseEntity<String> erabiltzaileaEguneratu(@PathVariable Long id, @RequestBody Erabiltzailea eguneratutakoErabiltzailea) {
+    erabiltzaileZerbitzua.erabiltzaileaEguneratu(id, eguneratutakoErabiltzailea);
+    return new ResponseEntity<>("Erabiltzailea ongi eguneratu da", HttpStatus.OK);
+}
+```
+
+- Baliabideak ezabatzeko **DELETE**
+```java
+@DeleteMapping("/erabiltzaileak/{id}")
+public ResponseEntity<String> erabiltzaileaEzabatu(@PathVariable Long id) {
+    erabiltzaileZerbitzua.erabiltzaileaEzabatu(id);
+    return new ResponseEntity<>("Erabiltzailea ongi ezabatu da", HttpStatus.OK);
+}
+
+```
