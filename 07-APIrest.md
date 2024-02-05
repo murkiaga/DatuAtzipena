@@ -149,3 +149,58 @@ public ResponseEntity<String> erabiltzaileaEzabatu(@PathVariable Long id) {
 }
 
 ```
+
+## 7.5 @JsonBackReference eta @JsonManagedReference
+
+Demagun *team* eta *cyclist* modeloak ditugula. Talde batek hainbat txirrindulari ditu baina txirrindulari bat talde bakarrean egon daiteke (1-N erlazioa).
+
+Talde bat inprimatzean, bere txirrindulari guztiak ere bueltatzen dira JSON bidez, baina aldi berean, txirrindulari bakoitzeko bere taldea ere itzultzen da... berriz txirrindulariak itzuliz eta **infinite recursion** edo bukle amaigabe bat sortuz. 
+
+Horregatik, erabaki behar dugu ze modelotatik itzuliko diren beste modeloak JSONean eta zeinetan ez. Talde batetik bere txirrindulariak itzultzean honelakoa da JSONa:
+<img src="img/07-APIrest/teametik_cyclistak.png" alt= "Team batetik cyclist guztiak">
+
+Hau da, talde bakoitzeko bere txirrindulari guztiak itzultzen ditu. Honela eginda baina, txirrindulariak itzultzen dituen APIak ez digu beren taldeei buruzko informaziorik emongo, gutxienez [hurrengo puntua](#76-jsonproperty) ikusi arte.
+<img src="img/07-APIrest/cyclist_no_team.png" alt= "Txirrindulariak, team ikusi gabe">
+
+Kontrako erabakia hartuko bagenu, talde bakoitza inprimatzean ez genuke txirrindularien informaziorik edukiko, eta txirrindulariak inprimatzean, taldeen informazioa hainbat aldiz inprimatuko litzateke (talde horretako txirrindulariak beste aldiz). **Kasu hau ez da egokia**
+<img src="img/07-APIrest/cyclist_team.png" alt= "Txirrindulariak, teamekin">
+
+Laburbilduz... 1-N motako erlazioan bagaude, interesatzen zaigu "1" entitate hori inprimatzean bueltatzea bere "N" guztiak, eta ez alderantziz.
+
+Nola egiten da hau? @JsonBackReference eta @JsonManagedReference anotazioak erabiliz.
+
+Objektu baten atributua JSONean itzultzea nahi badugu, @JsonManagedReference erabili:
+
+**Team.java** modeloan:
+```java
+@JsonManagedReference
+@OneToMany(mappedBy = "team",cascade = CascadeType.ALL)
+List <Cyclist> cyclists = new ArrayList<>();
+```
+
+Objektu baten atributua JSONean EZ itzultzea nahi badugu, @JsonBackReference erabili:
+
+**Cyclist.java** modeloan:
+```java
+@JsonBackReference
+@ManyToOne
+@JoinColumn (name = "team_id")
+private Team team;
+```
+
+## 7.6 @JsonProperty
+Objektu bati atributu bat gehitu nahi badiogu JSONean, @JsonProperty anotazioa erabili dezakegu. Adibidez, aurreko kasuan txirrindulari bakoitza ze taldekoa den jakin nahi badugu (taldearen izena edo taldearen IDa adibidez), anotazio hau erabiliko dugu.
+
+**Cyclist.java** modeloan:
+```java
+@JsonProperty("teamName")
+public String getTeamName() {
+    if (team != null) {
+        return team.getName();
+    } else {
+        return null;
+    }
+}
+```
+Hau eginda, txirrindulari bakoitzeko "*teamName*" izeneko atributua ere agertuko da:
+<img src="img/07-APIrest/cyclist_teamOK.png" alt= "Txirrindulariak, teamNamekin">
