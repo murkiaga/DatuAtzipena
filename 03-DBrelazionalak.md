@@ -130,7 +130,7 @@ PreparedStatement prepareStatement(String sql, int mota, int konkurrentzia)
 
 * <code>ResultSet.TYPE_FORDWARD_ONLY</code>: Defektuzko balioa da, aurrerantz (edo next()) irakurtzeko. 
 * <code>ResultSet.TYPE_SCROLL_INSENSITIVE</code>: *scrollable* motako ResultSeta sortzen du, zeinetan ez diren islatzen datu basean beste prozesu batzuk egindako aldaketak. Hau da, irakurketa egindako momentuko balioak soilik izango ditu.
-* <code>ResultSet.TYPE_SCROLL_SENSITIVE</code>: *scrollable* motako ResultSeta sortzen du eta beste prozesu batzuk datu basean egindako aldaketak islatzen ditu (datu eguneratuak).
+* <code>ResultSet.TYPE_SCROLL_SENSITIVE</code>: *scrollable* motako ResultSeta sortzen du eta beste prozesu batzuk datu basean egindako aldaketak islatzen ditu (datu eguneratuak). Datu base kudeatzaile batzuetan <code>ResultSet.refreshRow()</code> exekutatu behar da aldaketak benetan ikusteko.
 
 *scrollable* motako ResultSeta nahi badugu, adierazi behar dugu ea ResultSet horretan **egingo ditugun aldaketak datu basean gordeko ditugun ala ez**. Hau <code>konkurrentzia</code> parametroan adierazi behar da.
 * <code>ResultSet.CONCUR_READ_ONLY</code>: soilik irakurketarako
