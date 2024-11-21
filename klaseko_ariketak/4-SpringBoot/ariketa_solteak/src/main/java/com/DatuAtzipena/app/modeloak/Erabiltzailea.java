@@ -1,7 +1,10 @@
 package com.DatuAtzipena.app.modeloak;
 
+import jakarta.persistence.Entity;
 
+@Entity
 public class Erabiltzailea {
+	//UGAITZEK EGINDA
     private int id;           
     private String izena;     
     private String abizena;   
