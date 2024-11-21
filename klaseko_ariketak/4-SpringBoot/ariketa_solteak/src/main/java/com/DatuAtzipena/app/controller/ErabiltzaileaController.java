@@ -12,14 +12,14 @@ import java.util.List;
 
 @Controller
 public class ErabiltzaileaController {
-
+	//UGAITZEK EGINDA
     private final List<Erabiltzailea> erabiltzaileak = new ArrayList<>();
 
     public ErabiltzaileaController() {
-        erabiltzaileak.add(new Erabiltzailea(1, "Asier", "Aldekoa", "a_aldekoa@fpzornotza.com"));
-        erabiltzaileak.add(new Erabiltzailea(2, "Ugaitz", "Bilbao", "u_bilbao@fpzornotza.com"));
-        erabiltzaileak.add(new Erabiltzailea(3, "Josu", "Foruria", "j_foruria@fpzornotza.com"));
-        erabiltzaileak.add(new Erabiltzailea(4, "Egoitz", "Urrutia", "e_urrutia@fpzornotza.com"));
+        erabiltzaileak.add(new Erabiltzailea(1, "Asier", "Pepito", "a_pepito@fpzornotza.com"));
+        erabiltzaileak.add(new Erabiltzailea(2, "Ugaitz", "Pepito2", "u_pepito2@fpzornotza.com"));
+        erabiltzaileak.add(new Erabiltzailea(3, "Josu", "Pepito3", "j_pepito3@fpzornotza.com"));
+        erabiltzaileak.add(new Erabiltzailea(4, "Egoitz", "Pepito4", "e_pepito4@fpzornotza.com"));
     }
 
     @GetMapping("/erabiltzaileak")
