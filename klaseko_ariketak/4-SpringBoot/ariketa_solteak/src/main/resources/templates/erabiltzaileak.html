@@ -1,14 +1,13 @@
+<!-- //UGAITZEK EGINDA -->
 <body>
     <h1>Erabiltzaileen Zerrenda</h1>
     <table border="1">
- 
             <tr>
                 <th>ID</th>
                 <th>Izena</th>
                 <th>Abizena</th>
                 <th>Emaila</th>
             </tr>
- 
             <tr th:each="erabiltzailea : ${erabiltzaileak}">
                 <td th:text="${erabiltzailea.id}">ID</td>
                 <td th:text="${erabiltzailea.izena}">Izena</td>
