@@ -204,3 +204,45 @@ public String getTeamName() {
 ```
 Hau eginda, txirrindulari bakoitzeko "*teamName*" izeneko atributua ere agertuko da:
 <img src="img/07-APIrest/cyclist_teamOK.png" alt= "Txirrindulariak, teamNamekin">
+
+### 7.5.2 Hainbat @JsonBackReference modelo batean
+Zergatik erabiltzen da batzuetan "value" @JsonManagedReference eta @JsonBackReference-n?
+
+@JsonManagedReference eta @JsonBackReference erlazio bidirekzional bakarra dagoenean *value* gabe funtzionatzen du. Baina erlazio bidirekzional bat baino gehiago dagoenean, Jackson-ek jakin behar du zein erreferentzia dagokion erlazio bakoitzari. Horretarako, value erabiltzen da.
+
+Hemen value erabiltzen dugu Jackson-ek jakin dezan:
+
+    "ikasle-irakasle" → Irakasle ↔ Ikaslea erlazioa
+    "mata-irakasle" → Irakasle ↔ MataKudeatzaile erlazioa
+
+Adibide honetan, **matrikula** modeloa beste 2 modelorekin lotuta dago.
+
+Ikaslea:
+```
+    ...
+    JsonManagedReference(value="ikaslea-matrikulak")
+	@OneToMany(mappedBy = "ikaslea",cascade = CascadeType.ALL)
+	List <Matrikula> matrikulak = new ArrayList<>();
+    ...
+```
+Irakasgaia:
+```
+    @JsonManagedReference(value="irakasgaia-matrikulak")
+	@OneToMany(mappedBy = "irakasgaia",cascade = CascadeType.ALL)
+	List <Matrikula> matrikulak = new ArrayList<>();
+```
+Matrikula:
+```
+    ...
+    @JsonBackReference(value="ikaslea-matrikulak")
+	@ManyToOne
+	@JoinColumn (name = "ikasle_id")
+	private Ikaslea ikaslea;
+	
+	@JsonBackReference(value="irakasgaia-matrikulak")
+	@ManyToOne
+	@JoinColumn (name = "irakasgai_id")
+	private Irakasgaia irakasgaia;
+    ...
+```
+Baliteke value hori jarri gabe hasiera batean ondo ibiltzea... baina Postman bidez frogak egitean (JSON elementu bat ematean, @PostMapping batean adibidez) orduan ikusiko dugu errorea ematen duela (No JSON type allowed edo antzeko bat)
